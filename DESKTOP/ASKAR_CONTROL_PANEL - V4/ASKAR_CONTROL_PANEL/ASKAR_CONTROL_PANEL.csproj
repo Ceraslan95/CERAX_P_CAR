@@ -1,0 +1,420 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3E592E86-CE42-4A2E-9234-2DB6E2F8C746}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>ASKAR_CONTROL_PANEL</RootNamespace>
+    <AssemblyName>ASKAR_CONTROL_PANEL</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AGauge, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\AGauge.dll</HintPath>
+    </Reference>
+    <Reference Include="Bunifu_UI_v1.5.3, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Askar_TEST_Panel\Askar_TEST_Panel\bin\Debug\Bunifu_UI_v1.5.3.dll</HintPath>
+    </Reference>
+    <Reference Include="InTheHand.Net.Personal">
+      <HintPath>..\..\..\..\Downloads\InTheHand.Net.Personal.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ASKAR_UI_FORM.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ASKAR_UI_FORM.Designer.cs">
+      <DependentUpon>ASKAR_UI_FORM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BluetoothService.cs" />
+    <Compile Include="BMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="BMenu.Designer.cs">
+      <DependentUpon>BMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="LMenu.Designer.cs">
+      <DependentUpon>LMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PB_BatteryArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PB_BatteryArea.Designer.cs">
+      <DependentUpon>PB_BatteryArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PB_Internet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PB_Internet.Designer.cs">
+      <DependentUpon>PB_Internet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PB_MapArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PB_MapArea.Designer.cs">
+      <DependentUpon>PB_MapArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PB_TempArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PB_TempArea.Designer.cs">
+      <DependentUpon>PB_TempArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_BluetoothSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_BluetoothSettings.Designer.cs">
+      <DependentUpon>PL_BluetoothSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_CarTechProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_CarTechProp.Designer.cs">
+      <DependentUpon>PL_CarTechProp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_CarPCProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_CarPCProp.Designer.cs">
+      <DependentUpon>PL_CarPCProp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_ComSettingsMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_ComSettingsMenu.Designer.cs">
+      <DependentUpon>PL_ComSettingsMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_EmergencyNumbers.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_EmergencyNumbers.Designer.cs">
+      <DependentUpon>PL_EmergencyNumbers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_Exit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_Exit.Designer.cs">
+      <DependentUpon>PL_Exit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_Help.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_Help.Designer.cs">
+      <DependentUpon>PL_Help.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_KeyboardLock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_KeyboardLock.Designer.cs">
+      <DependentUpon>PL_KeyboardLock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_MotorSupport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_MotorSupport.Designer.cs">
+      <DependentUpon>PL_MotorSupport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_SystemProp.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_SystemProp.Designer.cs">
+      <DependentUpon>PL_SystemProp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PL_TechSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PL_TechSettings.Designer.cs">
+      <DependentUpon>PL_TechSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PR_GraphBattery.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_GraphBattery.Designer.cs">
+      <DependentUpon>PR_GraphBattery.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_GraphLandSlope.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_GraphLandSlope.Designer.cs">
+      <DependentUpon>PR_GraphLandSlope.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_GraphParkSensor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_GraphParkSensor.Designer.cs">
+      <DependentUpon>PR_GraphParkSensor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_GraphRpm.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_GraphRpm.Designer.cs">
+      <DependentUpon>PR_GraphRpm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_Graphs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_Graphs.Designer.cs">
+      <DependentUpon>PR_Graphs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_GraphTempState.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_GraphTempState.Designer.cs">
+      <DependentUpon>PR_GraphTempState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_Internet.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_Internet.Designer.cs">
+      <DependentUpon>PR_Internet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_Map.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_Map.Designer.cs">
+      <DependentUpon>PR_Map.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PR_MediaPlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PR_MediaPlayer.Designer.cs">
+      <DependentUpon>PR_MediaPlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RMenu.Designer.cs">
+      <DependentUpon>RMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WelcomeStart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WelcomeStart.Designer.cs">
+      <DependentUpon>WelcomeStart.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="ASKAR_UI_FORM.resx">
+      <DependentUpon>ASKAR_UI_FORM.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BMenu.resx">
+      <DependentUpon>BMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LMenu.resx">
+      <DependentUpon>LMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PB_BatteryArea.resx">
+      <DependentUpon>PB_BatteryArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PB_Internet.resx">
+      <DependentUpon>PB_Internet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PB_MapArea.resx">
+      <DependentUpon>PB_MapArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PB_TempArea.resx">
+      <DependentUpon>PB_TempArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_BluetoothSettings.resx">
+      <DependentUpon>PL_BluetoothSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_CarTechProp.resx">
+      <DependentUpon>PL_CarTechProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_CarPCProp.resx">
+      <DependentUpon>PL_CarPCProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_ComSettingsMenu.resx">
+      <DependentUpon>PL_ComSettingsMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_EmergencyNumbers.resx">
+      <DependentUpon>PL_EmergencyNumbers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_Exit.resx">
+      <DependentUpon>PL_Exit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_Help.resx">
+      <DependentUpon>PL_Help.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_KeyboardLock.resx">
+      <DependentUpon>PL_KeyboardLock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_MotorSupport.resx">
+      <DependentUpon>PL_MotorSupport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_SystemProp.resx">
+      <DependentUpon>PL_SystemProp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PL_TechSettings.resx">
+      <DependentUpon>PL_TechSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="PR_GraphBattery.resx">
+      <DependentUpon>PR_GraphBattery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_GraphLandSlope.resx">
+      <DependentUpon>PR_GraphLandSlope.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_GraphParkSensor.resx">
+      <DependentUpon>PR_GraphParkSensor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_GraphRpm.resx">
+      <DependentUpon>PR_GraphRpm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_Graphs.resx">
+      <DependentUpon>PR_Graphs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_GraphTempState.resx">
+      <DependentUpon>PR_GraphTempState.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_Internet.resx">
+      <DependentUpon>PR_Internet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_Map.resx">
+      <DependentUpon>PR_Map.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PR_MediaPlayer.resx">
+      <DependentUpon>PR_MediaPlayer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RMenu.resx">
+      <DependentUpon>RMenu.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WelcomeStart.resx">
+      <DependentUpon>WelcomeStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dvites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nvites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pvites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rvites.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\normalpilot.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\otopilotyesil.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ssbtny.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wifi.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bluetooth.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bluetoothDisconnect.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\wifiDisconnect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pvites2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\vitesatdown.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\vitesatUP.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\80612248-fire-flame-icon-logo-design-element.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\80612248-fire-flame-icon-logo-design-element1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\elfreni.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gearuparrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gearuparrow1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gearup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gdown.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
