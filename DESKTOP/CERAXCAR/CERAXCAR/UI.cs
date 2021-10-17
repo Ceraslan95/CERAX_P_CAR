@@ -12,9 +12,11 @@ namespace CERAXCAR
 {
     public partial class UI : Form
     {
+        Motor motor; 
         public UI()
-        {
+        {          
             InitializeComponent();
+            motor = new Motor(this);
         }
 
         private void UI_Load(object sender, EventArgs e)
@@ -61,6 +63,20 @@ namespace CERAXCAR
                 case Keys.F:
                     { pFourAlert.Visible = !pFourAlert.Visible; }
                     break;
+                case Keys.R:
+                    { 
+                        if (motor.GetGearStatus()=="0")
+                        {
+                            motor.SetGearStatus("R");
+                            KMUI.GaugeLabels.FindByName("lblGearBox").Text = "R";
+                        }
+                        else if (motor.GetGearStatus() == "R")
+                        {
+                            motor.SetGearStatus("0");
+                            KMUI.GaugeLabels.FindByName("lblGearBox").Text = "0";
+                        }
+                    }
+                    break;
                 //case Keys.G:
                 //    { pSecurity.Visible = !pSecurity.Visible; }
                 //    break;
@@ -68,7 +84,12 @@ namespace CERAXCAR
                     { pCruise.Visible = !pCruise.Visible; }
                     break;
                 case Keys.B:
-                    { pHandBreak.Visible = !pHandBreak.Visible; }
+                    { pHandBreak.Visible = !pHandBreak.Visible;
+                        if (pHandBreak.Visible)
+                        {
+                            KMUI.GaugeLabels.FindByName("lblGearBox").Text = "0";
+                        }                      
+                    }
                     break;
                 //case Keys.V:
                 //    { pESP.Visible = !pESP.Visible; }
@@ -79,6 +100,7 @@ namespace CERAXCAR
                 case Keys.NumPad5:
                     { pHorn.Visible = true; }
                     break;
+               
             }
         }
 
