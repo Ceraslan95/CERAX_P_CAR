@@ -92,7 +92,7 @@ namespace CERAXCAR
             this.KMUI.BaseArcSweep = 250;
             this.KMUI.BaseArcWidth = 3;
             this.KMUI.Center = new System.Drawing.Point(200, 200);
-            this.KMUI.Cursor = System.Windows.Forms.Cursors.No;
+            this.KMUI.Cursor = System.Windows.Forms.Cursors.Cross;
             this.KMUI.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             aGaugeLabel1.Color = System.Drawing.Color.Navy;
             aGaugeLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
