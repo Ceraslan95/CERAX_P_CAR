@@ -8,7 +8,16 @@ namespace CERAXCAR
 {
     public class GearBox
     {
-        private string gearValue;
-        
+        private string gearValue = "0";
+       
+        public string GetGearValue()
+        {
+            return gearValue;
+        }
+
+        public void SetGearValue(string value)
+        {
+            gearValue = value;
+        }
     }
 }

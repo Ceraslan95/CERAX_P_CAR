@@ -11,22 +11,22 @@ namespace CERAXCAR.Concrete
     {
         public bool GetStatus()
         {
-            throw new NotImplementedException();
+            return Status;
         }
 
         public int GetValue()
         {
-            throw new NotImplementedException();
+            return Value;
         }
 
         public void SetStatus(bool value)
         {
-            throw new NotImplementedException();
+            Status = value;
         }
 
         public void SetValue(int value)
         {
-            throw new NotImplementedException();
+            Value = value;
         }
     }
 }
