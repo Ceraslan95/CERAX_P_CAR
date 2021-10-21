@@ -9,9 +9,17 @@ namespace CERAXCAR.Concrete
 {
     public class HandBreak : Modul, IModul
     {
+        private bool handBreak;
+        UI _ui;
+        public HandBreak(UI ui)
+        {
+            _ui = ui;
+            handBreak = true;
+        }
+
         public bool GetStatus()
         {
-            throw new NotImplementedException();
+            return handBreak;
         }
 
         public int GetValue()
@@ -21,7 +29,8 @@ namespace CERAXCAR.Concrete
 
         public void SetStatus(bool value)
         {
-            throw new NotImplementedException();
+            handBreak = value;
+            _ui.pHandBreak.Visible = value;
         }
 
         public void SetValue(int value)

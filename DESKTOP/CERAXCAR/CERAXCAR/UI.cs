@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CERAXCAR.Concrete;
+using CERAXCAR.Concrete.Engine;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,16 +9,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static CERAXCAR.GearBox;
 
 namespace CERAXCAR
 {
     public partial class UI : Form
     {
-        //Motor motor; 
+        GearBox gearBox;
+        HandBreak handBreak;
+        Motor motor;
         public UI()
         {          
             InitializeComponent();
-            //motor = new Motor(this);
+            motor = new Motor(this);
+            gearBox = new GearBox(this);
+            handBreak = new HandBreak(this);
         }
 
         private void UI_Load(object sender, EventArgs e)
@@ -31,7 +38,13 @@ namespace CERAXCAR
             switch (e.KeyCode)
             {
                 case Keys.Escape:
-                    { this.Close(); }
+                    {
+                        if (MessageBox.Show("Kontrol paneli kapatılsın mı?", "CERAX CAR SYSTEM",
+                              MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        {
+                            this.Close();                          
+                        }
+                    }
                     break;
                 case Keys.T:
                     { pTopLed.Visible = !pTopLed.Visible; }
@@ -55,26 +68,50 @@ namespace CERAXCAR
                     { pNitro.Visible = true; }
                     break;
                 case Keys.E:
-                    { pRightSignal.Visible = !pRightSignal.Visible; }
+                    {
+                        if(timerRightSignal.Enabled)
+                        {
+                            StopRightSignal();
+                        }
+                        else
+                        {
+                            StartRightSignal();
+                        }
+                    
+                    }
                     break;
                 case Keys.Q:
-                    { pLeftSignal.Visible = !pLeftSignal.Visible; }
+                    {
+                        if (timerLeftSignal.Enabled)
+                        {
+                            StopLeftSignal();
+                        }
+                        else
+                        {
+                            StartLeftSignal();
+                        }
+                    }
                     break;
                 case Keys.F:
-                    { pFourAlert.Visible = !pFourAlert.Visible; }
+                    {                                             
+                        pFourAlert.Visible = !pFourAlert.Visible;
+                        if (Timer4Signal.Enabled)
+                        {
+                            Stop4Signal();
+                        }
+                        else
+                        {
+                            Start4Signal();
+                        }
+                    
+                    }
                     break;
                 case Keys.R:
-                    { 
-                        //if (motor.GetGearStatus()=="0")
-                        //{
-                        //    motor.SetGearStatus("R");
-                        //    KMUI.GaugeLabels.FindByName("lblGearBox").Text = "R";
-                        //}
-                        //else if (motor.GetGearStatus() == "R")
-                        //{
-                        //    motor.SetGearStatus("0");
-                        //    KMUI.GaugeLabels.FindByName("lblGearBox").Text = "0";
-                        //}
+                    {
+                        if (gearBox.GetGearValue() == Gears.Zero)
+                        {
+                            gearBox.SetGearValue(Gears.R);
+                        }
                     }
                     break;
                 //case Keys.G:
@@ -84,16 +121,29 @@ namespace CERAXCAR
                     { pCruise.Visible = !pCruise.Visible; }
                     break;
                 case Keys.B:
-                    { pHandBreak.Visible = !pHandBreak.Visible;
-                        if (pHandBreak.Visible)
+                    { 
+                        if (!motor.GetGoStatus())
                         {
-                            KMUI.GaugeLabels.FindByName("lblGearBox").Text = "0";
-                        }                      
+                            if (!handBreak.GetStatus())
+                            {
+                                handBreak.SetStatus(true);
+                            }
+                            else
+                            {
+                                handBreak.SetStatus(false);
+                            }
+                        }
+                                            
                     }
                     break;
-                //case Keys.V:
-                //    { pESP.Visible = !pESP.Visible; }
-                //    break;
+                case Keys.V:
+                    {
+                        if (!motor.GetGoStatus())
+                        {
+                            gearBox.SetGearValue(Gears.Zero);
+                        }
+                    }
+                    break;
                 case Keys.Space:
                     { pABS.Visible = true; }
                     break;
@@ -103,6 +153,13 @@ namespace CERAXCAR
                 case Keys.M:
                     { pTurbo.Visible = !pTurbo.Visible; }
                     break;
+                case Keys.W:
+                    {
+                        Console.WriteLine("w");
+                    }
+                    break;
+               
+                
 
             }
         }
@@ -125,5 +182,104 @@ namespace CERAXCAR
                     break;
             }
         }
+
+
+        public void Start4Signal()
+        {
+            if (timerRightSignal.Enabled) StopRightSignal();
+            if (timerLeftSignal.Enabled) StopLeftSignal();
+            pRightSignal.Visible = false;
+            pLeftSignal.Visible = false;
+           
+            Timer4Signal.Start();
+        }
+
+        public void Stop4Signal()
+        {
+            Timer4Signal.Stop();
+            pRightSignal.Visible = false;
+            pLeftSignal.Visible = false;
+                      
+        }
+
+        public void StartRightSignal()
+        {
+            if (!Timer4Signal.Enabled)
+            {
+                if (timerLeftSignal.Enabled) { StopLeftSignal(); }
+                timerRightSignal.Start();
+            }
+            
+        }
+
+        public void StopRightSignal()
+        {
+            timerRightSignal.Stop();
+            pRightSignal.Visible = false;
+            
+        }
+
+        public void StartLeftSignal()
+        {
+            if (!Timer4Signal.Enabled)
+            {
+                if (timerRightSignal.Enabled) { StopRightSignal(); }
+                timerLeftSignal.Start();
+            }
+
+        }
+
+        public void StopLeftSignal()
+        {
+            timerLeftSignal.Stop();
+            pLeftSignal.Visible = false;
+        }
+
+        //UI Timers 
+
+
+        private void Timer4Signal_Tick(object sender, EventArgs e)
+        {
+            pRightSignal.Visible = !pRightSignal.Visible;
+            pLeftSignal.Visible = !pLeftSignal.Visible;
+        }
+
+        private void timerInit_Tick(object sender, EventArgs e)
+        {
+            pLeftSignal.Visible = false;
+            pRightSignal.Visible = false;
+            pFourAlert.Visible = false;
+            pShortLed.Visible = false;
+            pLongLed.Visible = false;
+            pFog.Visible = false;
+            pBluetooth.Visible = false;
+            pABS.Visible = false;
+            pBattery.Visible = false;
+            pCruise.Visible = false;
+            pEngine.Visible = false;
+            pESP.Visible = false;
+            pHighTemp.Visible = false;
+            pOil.Visible = false;
+            pNitro.Visible = false;
+            pHorn.Visible = false;
+            pSecurity.Visible = false;
+            pTurbo.Visible = false;
+            pTopLed.Visible = false;
+            pTarget.Visible = false;
+
+            timerInit.Stop();
+        }
+
+        private void timerRightSignal_Tick(object sender, EventArgs e)
+        {
+            pRightSignal.Visible = !pRightSignal.Visible;
+        }
+
+        private void timerLeftSignal_Tick(object sender, EventArgs e)
+        {
+            pLeftSignal.Visible = !pLeftSignal.Visible;
+        }
+
+        
     }
 }

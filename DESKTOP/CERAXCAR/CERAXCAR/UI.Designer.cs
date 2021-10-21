@@ -29,12 +29,13 @@ namespace CERAXCAR
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.AGaugeLabel aGaugeLabel1 = new System.Windows.Forms.AGaugeLabel();
-            System.Windows.Forms.AGaugeLabel aGaugeLabel2 = new System.Windows.Forms.AGaugeLabel();
-            System.Windows.Forms.AGaugeLabel aGaugeLabel3 = new System.Windows.Forms.AGaugeLabel();
-            System.Windows.Forms.AGaugeRange aGaugeRange1 = new System.Windows.Forms.AGaugeRange();
-            System.Windows.Forms.AGaugeRange aGaugeRange2 = new System.Windows.Forms.AGaugeRange();
-            System.Windows.Forms.AGaugeRange aGaugeRange3 = new System.Windows.Forms.AGaugeRange();
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.AGaugeLabel aGaugeLabel7 = new System.Windows.Forms.AGaugeLabel();
+            System.Windows.Forms.AGaugeLabel aGaugeLabel8 = new System.Windows.Forms.AGaugeLabel();
+            System.Windows.Forms.AGaugeLabel aGaugeLabel9 = new System.Windows.Forms.AGaugeLabel();
+            System.Windows.Forms.AGaugeRange aGaugeRange7 = new System.Windows.Forms.AGaugeRange();
+            System.Windows.Forms.AGaugeRange aGaugeRange8 = new System.Windows.Forms.AGaugeRange();
+            System.Windows.Forms.AGaugeRange aGaugeRange9 = new System.Windows.Forms.AGaugeRange();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.KMUI = new System.Windows.Forms.AGauge();
             this.lblKM = new System.Windows.Forms.Label();
@@ -60,6 +61,10 @@ namespace CERAXCAR
             this.pSecurity = new System.Windows.Forms.PictureBox();
             this.pOil = new System.Windows.Forms.PictureBox();
             this.pBattery = new System.Windows.Forms.PictureBox();
+            this.Timer4Signal = new System.Windows.Forms.Timer(this.components);
+            this.timerInit = new System.Windows.Forms.Timer(this.components);
+            this.timerRightSignal = new System.Windows.Forms.Timer(this.components);
+            this.timerLeftSignal = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pNitro)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pFourAlert)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pRightSignal)).BeginInit();
@@ -94,48 +99,48 @@ namespace CERAXCAR
             this.KMUI.Center = new System.Drawing.Point(200, 200);
             this.KMUI.Cursor = System.Windows.Forms.Cursors.Cross;
             this.KMUI.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel1.Color = System.Drawing.Color.Navy;
-            aGaugeLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel1.Name = "GaugeLabel1";
-            aGaugeLabel1.Position = new System.Drawing.Point(161, 160);
-            aGaugeLabel1.Text = "CERAXLAN";
-            aGaugeLabel2.Color = System.Drawing.Color.AliceBlue;
-            aGaugeLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel2.Name = "lblGearBox";
-            aGaugeLabel2.Position = new System.Drawing.Point(190, 260);
-            aGaugeLabel2.Text = "0";
-            aGaugeLabel3.Color = System.Drawing.Color.Gray;
-            aGaugeLabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel3.Name = "GaugeLabel1";
-            aGaugeLabel3.Position = new System.Drawing.Point(185, 135);
-            aGaugeLabel3.Text = "km/h";
-            this.KMUI.GaugeLabels.Add(aGaugeLabel1);
-            this.KMUI.GaugeLabels.Add(aGaugeLabel2);
-            this.KMUI.GaugeLabels.Add(aGaugeLabel3);
-            aGaugeRange1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(50)))));
-            aGaugeRange1.EndValue = 240F;
-            aGaugeRange1.InnerRadius = 153;
-            aGaugeRange1.InRange = true;
-            aGaugeRange1.Name = "GaugeRange1";
-            aGaugeRange1.OuterRadius = 172;
-            aGaugeRange1.StartValue = 0F;
-            aGaugeRange2.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
-            aGaugeRange2.EndValue = 240F;
-            aGaugeRange2.InnerRadius = 90;
-            aGaugeRange2.InRange = true;
-            aGaugeRange2.Name = "GaugeRange2";
-            aGaugeRange2.OuterRadius = 100;
-            aGaugeRange2.StartValue = 0F;
-            aGaugeRange3.Color = System.Drawing.Color.DarkCyan;
-            aGaugeRange3.EndValue = 240F;
-            aGaugeRange3.InnerRadius = 79;
-            aGaugeRange3.InRange = false;
-            aGaugeRange3.Name = "KMBattery";
-            aGaugeRange3.OuterRadius = 86;
-            aGaugeRange3.StartValue = 0F;
-            this.KMUI.GaugeRanges.Add(aGaugeRange1);
-            this.KMUI.GaugeRanges.Add(aGaugeRange2);
-            this.KMUI.GaugeRanges.Add(aGaugeRange3);
+            aGaugeLabel7.Color = System.Drawing.Color.Navy;
+            aGaugeLabel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            aGaugeLabel7.Name = "GaugeLabel1";
+            aGaugeLabel7.Position = new System.Drawing.Point(161, 160);
+            aGaugeLabel7.Text = "CERAXLAN";
+            aGaugeLabel8.Color = System.Drawing.Color.AliceBlue;
+            aGaugeLabel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            aGaugeLabel8.Name = "lblGearBox";
+            aGaugeLabel8.Position = new System.Drawing.Point(190, 260);
+            aGaugeLabel8.Text = "0";
+            aGaugeLabel9.Color = System.Drawing.Color.Gray;
+            aGaugeLabel9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            aGaugeLabel9.Name = "GaugeLabel1";
+            aGaugeLabel9.Position = new System.Drawing.Point(185, 135);
+            aGaugeLabel9.Text = "km/h";
+            this.KMUI.GaugeLabels.Add(aGaugeLabel7);
+            this.KMUI.GaugeLabels.Add(aGaugeLabel8);
+            this.KMUI.GaugeLabels.Add(aGaugeLabel9);
+            aGaugeRange7.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(50)))));
+            aGaugeRange7.EndValue = 240F;
+            aGaugeRange7.InnerRadius = 153;
+            aGaugeRange7.InRange = true;
+            aGaugeRange7.Name = "GaugeRange1";
+            aGaugeRange7.OuterRadius = 172;
+            aGaugeRange7.StartValue = 0F;
+            aGaugeRange8.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
+            aGaugeRange8.EndValue = 240F;
+            aGaugeRange8.InnerRadius = 90;
+            aGaugeRange8.InRange = true;
+            aGaugeRange8.Name = "GaugeRange2";
+            aGaugeRange8.OuterRadius = 100;
+            aGaugeRange8.StartValue = 0F;
+            aGaugeRange9.Color = System.Drawing.Color.DarkCyan;
+            aGaugeRange9.EndValue = 240F;
+            aGaugeRange9.InnerRadius = 79;
+            aGaugeRange9.InRange = false;
+            aGaugeRange9.Name = "KMBattery";
+            aGaugeRange9.OuterRadius = 86;
+            aGaugeRange9.StartValue = 0F;
+            this.KMUI.GaugeRanges.Add(aGaugeRange7);
+            this.KMUI.GaugeRanges.Add(aGaugeRange8);
+            this.KMUI.GaugeRanges.Add(aGaugeRange9);
             this.KMUI.Location = new System.Drawing.Point(300, 100);
             this.KMUI.MaxValue = 240F;
             this.KMUI.MinValue = 0F;
@@ -400,6 +405,27 @@ namespace CERAXCAR
             this.pBattery.TabIndex = 25;
             this.pBattery.TabStop = false;
             // 
+            // Timer4Signal
+            // 
+            this.Timer4Signal.Interval = 800;
+            this.Timer4Signal.Tick += new System.EventHandler(this.Timer4Signal_Tick);
+            // 
+            // timerInit
+            // 
+            this.timerInit.Enabled = true;
+            this.timerInit.Interval = 3000;
+            this.timerInit.Tick += new System.EventHandler(this.timerInit_Tick);
+            // 
+            // timerRightSignal
+            // 
+            this.timerRightSignal.Interval = 800;
+            this.timerRightSignal.Tick += new System.EventHandler(this.timerRightSignal_Tick);
+            // 
+            // timerLeftSignal
+            // 
+            this.timerLeftSignal.Interval = 800;
+            this.timerLeftSignal.Tick += new System.EventHandler(this.timerLeftSignal_Tick);
+            // 
             // UI
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -438,6 +464,7 @@ namespace CERAXCAR
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.UI_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UI_KeyDown);
+            
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.UI_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.pNitro)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pFourAlert)).EndInit();
@@ -484,11 +511,15 @@ namespace CERAXCAR
         private System.Windows.Forms.PictureBox pCruise;
         private System.Windows.Forms.PictureBox pEngine;
         private System.Windows.Forms.PictureBox pHighTemp;
-        private System.Windows.Forms.PictureBox pHandBreak;
         private System.Windows.Forms.PictureBox pSecurity;
         private System.Windows.Forms.PictureBox pOil;
         private System.Windows.Forms.PictureBox pBattery;
         public System.Windows.Forms.AGauge KMUI;
+        private System.Windows.Forms.Timer Timer4Signal;
+        private System.Windows.Forms.Timer timerInit;
+        private System.Windows.Forms.Timer timerRightSignal;
+        private System.Windows.Forms.Timer timerLeftSignal;
+        public System.Windows.Forms.PictureBox pHandBreak;
     }
 }
 
