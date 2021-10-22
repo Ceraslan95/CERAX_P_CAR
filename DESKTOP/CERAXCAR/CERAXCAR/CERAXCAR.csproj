@@ -57,19 +57,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IModul.cs" />
-    <Compile Include="Concrete\Abs.cs" />
     <Compile Include="Concrete\Battery.cs" />
-    <Compile Include="Concrete\Cruise.cs" />
     <Compile Include="Concrete\Engine\Motor.cs" />
     <Compile Include="Concrete\Esp.cs" />
     <Compile Include="Concrete\Base\Modul.cs" />
     <Compile Include="Concrete\Greasing.cs" />
     <Compile Include="Concrete\HandBreak.cs" />
     <Compile Include="Concrete\MotorTemperature.cs" />
-    <Compile Include="Concrete\Nitro.cs" />
-    <Compile Include="Concrete\Turbo.cs" />
-    <Compile Include="Concrete\Engine\GearBox.cs" />
-    <Compile Include="Concrete\Engine\SpeedControlUnit.cs" />
     <Compile Include="UI.cs">
       <SubType>Form</SubType>
     </Compile>

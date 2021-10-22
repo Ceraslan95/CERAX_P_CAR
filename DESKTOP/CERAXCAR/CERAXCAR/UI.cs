@@ -9,21 +9,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static CERAXCAR.GearBox;
+using static CERAXCAR.Concrete.Engine.Motor;
+
 
 namespace CERAXCAR
 {
     public partial class UI : Form
     {
-        GearBox gearBox;
+       
         HandBreak handBreak;
         Motor motor;
+        private bool motorlock = false;
+        private bool nitrolock = false;
+        private bool abslock = false;
         public UI()
         {          
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;
             motor = new Motor(this);
-            gearBox = new GearBox(this);
+            
             handBreak = new HandBreak(this);
+           
         }
 
         private void UI_Load(object sender, EventArgs e)
@@ -65,7 +71,13 @@ namespace CERAXCAR
                     { pLongLed.Visible = true; }
                     break;
                 case Keys.NumPad8:
-                    { pNitro.Visible = true; }
+                    {
+                        if (!nitrolock)
+                        {
+                            nitrolock = true;
+                            motor.SetNitroValue(true);
+                        }
+                    }
                     break;
                 case Keys.E:
                     {
@@ -108,18 +120,16 @@ namespace CERAXCAR
                     break;
                 case Keys.R:
                     {
-                        if (gearBox.GetGearValue() == Gears.Zero)
+                        if (motor.GetGearValue() == Gears.Zero)
                         {
-                            gearBox.SetGearValue(Gears.R);
+                            motor.SetGearValue(Gears.R);
                         }
                     }
                     break;
                 //case Keys.G:
                 //    { pSecurity.Visible = !pSecurity.Visible; }
                 //    break;
-                case Keys.H:
-                    { pCruise.Visible = !pCruise.Visible; }
-                    break;
+               
                 case Keys.B:
                     { 
                         if (!motor.GetGoStatus())
@@ -140,27 +150,37 @@ namespace CERAXCAR
                     {
                         if (!motor.GetGoStatus())
                         {
-                            gearBox.SetGearValue(Gears.Zero);
+                            motor.SetGearValue(Gears.Zero);
                         }
                     }
                     break;
                 case Keys.Space:
-                    { pABS.Visible = true; }
+                    {   
+                        if (!abslock)                         
+                        {
+                            abslock = true;
+                            motor.SetCruiseValue(false);
+                            motor.SetAbsValue(true);
+                        }
+                    
+                    }
                     break;
                 case Keys.NumPad5:
                     { pHorn.Visible = true; }
                     break;
-                case Keys.M:
-                    { pTurbo.Visible = !pTurbo.Visible; }
-                    break;
+               
                 case Keys.W:
                     {
-                        Console.WriteLine("w");
+                        if (!motorlock) 
+                        {
+                            motorlock = true;
+                            motor.SetCruiseValue(false);
+                            motor.SpeedUp();
+                            Console.WriteLine("speed up");
+                        }                       
                     }
                     break;
-               
-                
-
+                            
             }
         }
 
@@ -172,13 +192,41 @@ namespace CERAXCAR
                     { pLongLed.Visible = false; }
                     break;
                 case Keys.NumPad8:
-                    { pNitro.Visible = false; }
+                    { nitrolock = false; motor.SetNitroValue(false); }
                     break;
                 case Keys.Space:
-                    { pABS.Visible = false; }
+                    { abslock = false; motor.SetAbsValue(false); }
                     break;
                 case Keys.NumPad5:
                     { pHorn.Visible = false; }
+                    break;
+                case Keys.W:
+                    { motorlock = false; motor.SpeedDown(); Console.WriteLine("speed down"); }
+                    break;
+                case Keys.M:
+                    {
+                        if (motor.GetTurboValue())
+                        {
+                            motor.SetTurboValue(false);
+                        }
+                        else
+                        {
+                            motor.SetTurboValue(true);
+                        }
+                    }
+                    break;
+                case Keys.H:
+                    {
+                        if (motor.GetCruiseValue())
+                        {
+                            motor.SetCruiseValue(false);
+                        }
+                        else
+                        {
+                            motor.SetCruiseValue(true);
+                        }
+                            
+                    }
                     break;
             }
         }
