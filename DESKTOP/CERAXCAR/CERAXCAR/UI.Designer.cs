@@ -30,12 +30,12 @@ namespace CERAXCAR
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.AGaugeLabel aGaugeLabel4 = new System.Windows.Forms.AGaugeLabel();
-            System.Windows.Forms.AGaugeLabel aGaugeLabel5 = new System.Windows.Forms.AGaugeLabel();
-            System.Windows.Forms.AGaugeLabel aGaugeLabel6 = new System.Windows.Forms.AGaugeLabel();
-            System.Windows.Forms.AGaugeRange aGaugeRange4 = new System.Windows.Forms.AGaugeRange();
-            System.Windows.Forms.AGaugeRange aGaugeRange5 = new System.Windows.Forms.AGaugeRange();
-            System.Windows.Forms.AGaugeRange aGaugeRange6 = new System.Windows.Forms.AGaugeRange();
+            System.Windows.Forms.AGaugeLabel aGaugeLabel7 = new System.Windows.Forms.AGaugeLabel();
+            System.Windows.Forms.AGaugeLabel aGaugeLabel8 = new System.Windows.Forms.AGaugeLabel();
+            System.Windows.Forms.AGaugeLabel aGaugeLabel9 = new System.Windows.Forms.AGaugeLabel();
+            System.Windows.Forms.AGaugeRange aGaugeRange7 = new System.Windows.Forms.AGaugeRange();
+            System.Windows.Forms.AGaugeRange aGaugeRange8 = new System.Windows.Forms.AGaugeRange();
+            System.Windows.Forms.AGaugeRange aGaugeRange9 = new System.Windows.Forms.AGaugeRange();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UI));
             this.KMUI = new System.Windows.Forms.AGauge();
             this.lblKM = new System.Windows.Forms.Label();
@@ -99,48 +99,48 @@ namespace CERAXCAR
             this.KMUI.Center = new System.Drawing.Point(200, 200);
             this.KMUI.Cursor = System.Windows.Forms.Cursors.Cross;
             this.KMUI.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel4.Color = System.Drawing.Color.Navy;
-            aGaugeLabel4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel4.Name = "GaugeLabel1";
-            aGaugeLabel4.Position = new System.Drawing.Point(161, 160);
-            aGaugeLabel4.Text = "CERAXLAN";
-            aGaugeLabel5.Color = System.Drawing.Color.AliceBlue;
-            aGaugeLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel5.Name = "lblGearBox";
-            aGaugeLabel5.Position = new System.Drawing.Point(190, 260);
-            aGaugeLabel5.Text = "0";
-            aGaugeLabel6.Color = System.Drawing.Color.Gray;
-            aGaugeLabel6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            aGaugeLabel6.Name = "GaugeLabel1";
-            aGaugeLabel6.Position = new System.Drawing.Point(185, 135);
-            aGaugeLabel6.Text = "km/h";
-            this.KMUI.GaugeLabels.Add(aGaugeLabel4);
-            this.KMUI.GaugeLabels.Add(aGaugeLabel5);
-            this.KMUI.GaugeLabels.Add(aGaugeLabel6);
-            aGaugeRange4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(50)))));
-            aGaugeRange4.EndValue = 240F;
-            aGaugeRange4.InnerRadius = 153;
-            aGaugeRange4.InRange = true;
-            aGaugeRange4.Name = "GaugeRange1";
-            aGaugeRange4.OuterRadius = 172;
-            aGaugeRange4.StartValue = 0F;
-            aGaugeRange5.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
-            aGaugeRange5.EndValue = 240F;
-            aGaugeRange5.InnerRadius = 90;
-            aGaugeRange5.InRange = true;
-            aGaugeRange5.Name = "GaugeRange2";
-            aGaugeRange5.OuterRadius = 100;
-            aGaugeRange5.StartValue = 0F;
-            aGaugeRange6.Color = System.Drawing.Color.DarkCyan;
-            aGaugeRange6.EndValue = 240F;
-            aGaugeRange6.InnerRadius = 79;
-            aGaugeRange6.InRange = false;
-            aGaugeRange6.Name = "KMBattery";
-            aGaugeRange6.OuterRadius = 86;
-            aGaugeRange6.StartValue = 0F;
-            this.KMUI.GaugeRanges.Add(aGaugeRange4);
-            this.KMUI.GaugeRanges.Add(aGaugeRange5);
-            this.KMUI.GaugeRanges.Add(aGaugeRange6);
+            aGaugeLabel7.Color = System.Drawing.Color.Navy;
+            aGaugeLabel7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            aGaugeLabel7.Name = "GaugeLabel1";
+            aGaugeLabel7.Position = new System.Drawing.Point(161, 160);
+            aGaugeLabel7.Text = "CERAXLAN";
+            aGaugeLabel8.Color = System.Drawing.Color.AliceBlue;
+            aGaugeLabel8.Font = new System.Drawing.Font("Microsoft Sans Serif", 28.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            aGaugeLabel8.Name = "lblGearBox";
+            aGaugeLabel8.Position = new System.Drawing.Point(190, 260);
+            aGaugeLabel8.Text = "0";
+            aGaugeLabel9.Color = System.Drawing.Color.Gray;
+            aGaugeLabel9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            aGaugeLabel9.Name = "GaugeLabel1";
+            aGaugeLabel9.Position = new System.Drawing.Point(185, 135);
+            aGaugeLabel9.Text = "km/h";
+            this.KMUI.GaugeLabels.Add(aGaugeLabel7);
+            this.KMUI.GaugeLabels.Add(aGaugeLabel8);
+            this.KMUI.GaugeLabels.Add(aGaugeLabel9);
+            aGaugeRange7.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(50)))));
+            aGaugeRange7.EndValue = 240F;
+            aGaugeRange7.InnerRadius = 153;
+            aGaugeRange7.InRange = true;
+            aGaugeRange7.Name = "GaugeRange1";
+            aGaugeRange7.OuterRadius = 172;
+            aGaugeRange7.StartValue = 0F;
+            aGaugeRange8.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(60)))));
+            aGaugeRange8.EndValue = 240F;
+            aGaugeRange8.InnerRadius = 90;
+            aGaugeRange8.InRange = true;
+            aGaugeRange8.Name = "GaugeRange2";
+            aGaugeRange8.OuterRadius = 100;
+            aGaugeRange8.StartValue = 0F;
+            aGaugeRange9.Color = System.Drawing.Color.DarkCyan;
+            aGaugeRange9.EndValue = 240F;
+            aGaugeRange9.InnerRadius = 79;
+            aGaugeRange9.InRange = false;
+            aGaugeRange9.Name = "KMBattery";
+            aGaugeRange9.OuterRadius = 86;
+            aGaugeRange9.StartValue = 0F;
+            this.KMUI.GaugeRanges.Add(aGaugeRange7);
+            this.KMUI.GaugeRanges.Add(aGaugeRange8);
+            this.KMUI.GaugeRanges.Add(aGaugeRange9);
             this.KMUI.Location = new System.Drawing.Point(300, 100);
             this.KMUI.MaxValue = 240F;
             this.KMUI.MinValue = 0F;
@@ -174,16 +174,17 @@ namespace CERAXCAR
             this.KMUI.TabIndex = 0;
             this.KMUI.Text = "aGauge1";
             this.KMUI.Value = 0F;
+            this.KMUI.ValueChanged += new System.EventHandler(this.KMUI_ValueChanged);
             // 
             // lblKM
             // 
             this.lblKM.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.lblKM.ForeColor = System.Drawing.Color.LightSkyBlue;
-            this.lblKM.Location = new System.Drawing.Point(455, 425);
+            this.lblKM.Location = new System.Drawing.Point(458, 425);
             this.lblKM.Name = "lblKM";
-            this.lblKM.Size = new System.Drawing.Size(100, 23);
+            this.lblKM.Size = new System.Drawing.Size(92, 23);
             this.lblKM.TabIndex = 1;
-            this.lblKM.Text = "0000000";
+            this.lblKM.Text = "00000000";
             // 
             // lblInfo
             // 
@@ -191,9 +192,9 @@ namespace CERAXCAR
             this.lblInfo.ForeColor = System.Drawing.Color.SteelBlue;
             this.lblInfo.Location = new System.Drawing.Point(359, 456);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(363, 31);
+            this.lblInfo.Size = new System.Drawing.Size(282, 31);
             this.lblInfo.TabIndex = 2;
-            this.lblInfo.Text = "Bağlantı kuruluyor..bekleyiniz";
+            this.lblInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pNitro
             // 
@@ -299,9 +300,9 @@ namespace CERAXCAR
             // 
             this.pTarget.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pTarget.BackgroundImage")));
             this.pTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pTarget.Location = new System.Drawing.Point(691, 242);
+            this.pTarget.Location = new System.Drawing.Point(694, 243);
             this.pTarget.Name = "pTarget";
-            this.pTarget.Size = new System.Drawing.Size(33, 36);
+            this.pTarget.Size = new System.Drawing.Size(29, 37);
             this.pTarget.TabIndex = 15;
             this.pTarget.TabStop = false;
             // 
@@ -491,8 +492,6 @@ namespace CERAXCAR
         }
 
         #endregion
-        private System.Windows.Forms.Label lblKM;
-        private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.PictureBox pFourAlert;
         private System.Windows.Forms.PictureBox pRightSignal;
         private System.Windows.Forms.PictureBox pLeftSignal;
@@ -503,7 +502,6 @@ namespace CERAXCAR
         private System.Windows.Forms.PictureBox pTopLed;
         private System.Windows.Forms.PictureBox pTarget;
         private System.Windows.Forms.PictureBox pESP;
-        private System.Windows.Forms.PictureBox pBluetooth;
         private System.Windows.Forms.PictureBox pEngine;
         private System.Windows.Forms.PictureBox pHighTemp;
         private System.Windows.Forms.PictureBox pSecurity;
@@ -519,6 +517,9 @@ namespace CERAXCAR
         public System.Windows.Forms.PictureBox pNitro;
         public System.Windows.Forms.PictureBox pABS;
         public System.Windows.Forms.PictureBox pCruise;
+        public System.Windows.Forms.Label lblInfo;
+        public System.Windows.Forms.PictureBox pBluetooth;
+        public System.Windows.Forms.Label lblKM;
     }
 }
 

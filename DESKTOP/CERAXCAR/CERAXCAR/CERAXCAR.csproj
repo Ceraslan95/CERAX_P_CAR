@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Abstract\IModul.cs" />
     <Compile Include="Concrete\Battery.cs" />
+    <Compile Include="Concrete\Bluetooth.cs" />
     <Compile Include="Concrete\Engine\Motor.cs" />
     <Compile Include="Concrete\Esp.cs" />
     <Compile Include="Concrete\Base\Modul.cs" />

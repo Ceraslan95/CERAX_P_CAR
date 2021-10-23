@@ -14,14 +14,25 @@ namespace CERAXCAR.Concrete.Engine
         int km;
 
         private bool motorStatus;
-        private bool motorGoStatus;
+        
         private int speed;
         private bool goingDirection;
+        private Direction direction;
+
+        private int directionValue = 90;
+        private const int directionMaxLeftValue = 45;
+        private const int directionMiddleValue = 90;
+        private const int directionMaxRightValue = 135;
+        
+
         private bool speedUpDown;
 
-        public  Timer speedTimer;
+        public Timer speedTimer;
+        public Timer directionTimer;
         private const int speedMaxValue = 240;
         private const int speedMinValue = 0;
+
+        
 
         //--------------------------------
 
@@ -56,7 +67,12 @@ namespace CERAXCAR.Concrete.Engine
 
         private bool cruise = false;
 
-
+        public enum Direction
+        {
+            Left = -1,
+            Middle = 0,
+            Right = 1
+        }
         public enum Gears
         {
             R = -1,
@@ -78,17 +94,73 @@ namespace CERAXCAR.Concrete.Engine
         {
             _ui = ui;
             motorStatus = false;
-            motorGoStatus = false;
+            
             goingDirection = true;
             speedUpDown = false;
+
+            direction = Direction.Middle;
 
             speedTimer = new Timer();
             speedTimer.Interval = 15;
             speedTimer.Elapsed += new ElapsedEventHandler(SpeedTimer_Tick);
 
+            directionTimer = new Timer();
+            directionTimer.Interval = 50;
+            directionTimer.Elapsed += new ElapsedEventHandler(DirectionTimer_Tick);
+
             gearValue = Gears.Zero;
         }
 
+        private void DirectionTimer_Tick(object sender, ElapsedEventArgs e)
+        {
+            switch (direction)
+            {
+                case Direction.Left:
+                    {
+                        TurnDirectionLeft();
+                    }
+                    break;
+                case Direction.Middle:
+                    {
+                        TurnDirectionMiddle();
+                    }
+                    break;
+                case Direction.Right:
+                    {
+                        TurnDirectionRight();
+                    }
+                    break;
+            }
+        }
+
+        private void TurnDirectionRight()
+        {
+            if (directionValue < directionMaxRightValue)
+            {
+                directionValue++;
+            }
+        }
+
+        private void TurnDirectionMiddle()
+        {
+            if (directionValue < directionMiddleValue)
+            {
+                directionValue++;               
+            }
+            else
+            {
+                directionValue--;                
+            }
+            if (directionValue == directionMiddleValue) { directionTimer.Stop(); }
+        }
+
+        private void TurnDirectionLeft()
+        {
+            if (directionValue > directionMaxLeftValue)
+            {
+                directionValue--;
+            }
+        }
 
         public void SpeedUp()
         {
@@ -137,7 +209,7 @@ namespace CERAXCAR.Concrete.Engine
         {
             return speedUpDown;
         }
-        public void SpeedTimer_Tick(object sender, EventArgs e)
+        private void SpeedTimer_Tick(object sender, EventArgs e)
         {
             if (speedUpDown)
             {
@@ -162,7 +234,7 @@ namespace CERAXCAR.Concrete.Engine
         }
         public bool GetGoStatus()
         {
-            return motorGoStatus;
+            return speedTimer.Enabled;
         }
 
         public bool GetGoingDirection()
@@ -396,6 +468,25 @@ namespace CERAXCAR.Concrete.Engine
             }
 
 
+        }
+
+        public Direction GetDirectionStatus()
+        {
+            return direction;
+        }
+
+        public void SetDirectionStatus(Direction value)
+        {
+            direction = value;
+        }
+
+        public void SetDirectionValue(int value)
+        {
+            directionValue = value;
+        }
+        public int GetDirectionValue()
+        {
+            return directionValue;
         }
     }
 }
