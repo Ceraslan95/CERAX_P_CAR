@@ -1,8 +1,13 @@
-﻿using System;
+﻿using InTheHand.Net;
+using InTheHand.Net.Bluetooth;
+using InTheHand.Net.Sockets;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using System.Timers;
 
 namespace CERAXCAR.Concrete
@@ -11,6 +16,8 @@ namespace CERAXCAR.Concrete
     {
         
         UI _ui;
+        private const string carName = "HC-06";
+
         private bool bluetoothStatus = false;
         public Timer connectionTimer;
 
@@ -31,15 +38,21 @@ namespace CERAXCAR.Concrete
         public const byte addressLedR = 0x0B;
         public const byte addressGoingDirection = 0x0C;
         public const byte addressDirectionRotate = 0x0D;
+        public const byte addressHorn = 0x0E;
+        public const byte addressSecurity = 0x0F;
+
+        private BluetoothClient bluetoothClient;
+        public BackgroundWorker scanWorker;
+        public BackgroundWorker connectionWorker;
         
-        
+       
 
-
-
+        BluetoothDeviceInfo carDeviceInfo;
 
         public Bluetooth(UI ui)
         {
             _ui = ui;
+            
             connectionTimer = new Timer();
             connectionTimer.Interval = 700;
             connectionTimer.Elapsed += new ElapsedEventHandler(ConnectionTimer_Tick);
@@ -48,11 +61,111 @@ namespace CERAXCAR.Concrete
             sendData[0] = CheckSumKey;
 
             receivedData = new byte[10];
+
+
+            
+            bluetoothClient = new BluetoothClient();
+            scanWorker = new BackgroundWorker();
+            scanWorker.DoWork += ScanWorker_DoWork;
+            scanWorker.RunWorkerCompleted += ScanWorker_RunWorkerCompletedAsync;
+        }
+     
+
+        public void ScanWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            ScanDevices();
+        }
+        private void ScanWorker_RunWorkerCompletedAsync(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (carDeviceInfo.DeviceAddress == null) 
+            { 
+                StopScanner();
+            }
+            else
+            {
+                Connect(carDeviceInfo.DeviceAddress);
+            }
+                    
         }
 
-        private void ConnectionTimer_Tick(object sender, ElapsedEventArgs e)
+        private void StopScanner()
         {
+            
+            connectionTimer.Stop();
+            SetBluetoothStatus(false);
+            _ui.lblInfo.Text = "Bağlantı kurulamadı !";
+            
+        }
+
+        public void Connect(BluetoothAddress address)
+        {
+            
+            try
+            {
+                if (address is BluetoothAddress bluetoothAddress)
+                {
+                    var endPoint = new BluetoothEndPoint(bluetoothAddress, BluetoothService.SerialPort);
+                    bluetoothClient.Connect(endPoint);
+
+                    //bluetoothListener = new BluetoothListener(endPoint);
+                    //bluetoothListener.Start();
+                    //bluetoothClient = bluetoothListener.AcceptBluetoothClient();
+
+
+                    SetBluetoothStatus(true);
+
+                }
+                else
+                {
+
+                    _ui.lblInfo.Text = "Uyuşmazlık !";
+                }
+            }
+            catch 
+            {
+                StopScanner();
+            }
+
+        }
+
+        public void ScanDevices()
+        {
+            Disconnect();
+
+            var devices = bluetoothClient.DiscoverDevices();
+            foreach (var item in devices)
+            {
+                if (item.DeviceName == carName)
+                {
+                    carDeviceInfo = new BluetoothDeviceInfo(item.DeviceAddress);
+                }
+            }
+
+        }
+        public void Disconnect()
+        {
+            if (bluetoothClient != null)
+            {
+                if (bluetoothClient.Connected)
+                {
+                    bluetoothClient.Close();
+                    bluetoothClient.Dispose();
+
+                    bluetoothClient = new BluetoothClient();
+                }
+            }
+        }
+
+
+
+
+
+
+
+        private void ConnectionTimer_Tick(object sender, ElapsedEventArgs e)
+        {           
             _ui.pBluetooth.Visible = !_ui.pBluetooth.Visible;
+            Console.WriteLine(_ui.pBluetooth.Visible);
             CheckConnection();
         }
 
@@ -61,6 +174,7 @@ namespace CERAXCAR.Concrete
             if (bluetoothStatus)
             {
                 connectionTimer.Stop();
+                _ui.pBluetooth.Visible = true;
             }
         }
 
@@ -72,6 +186,7 @@ namespace CERAXCAR.Concrete
         private void SetBluetoothStatus(bool value)
         {
             bluetoothStatus = value;
+            
         }
 
         public void StartConnection()
@@ -86,8 +201,10 @@ namespace CERAXCAR.Concrete
 
         private void StartBluetooth()
         {
-            //Baglanti yapilacak ve bluetoothStatus true yapilacak
+            scanWorker.RunWorkerAsync();
         }
+
+
 
         private void SendData(byte address,byte value)
         {
@@ -95,28 +212,121 @@ namespace CERAXCAR.Concrete
             {
                 try
                 {
-                    
                     sendData[1] = address;
                     sendData[2] = value;
-                    //var stream = bluetoothClient.GetStream();
+                    var stream = bluetoothClient.GetStream();
                     ////stream.WriteByte(value);
 
-                    //stream.Write(Data, 0, Data.Length);
+                    stream.Write(sendData, 0, sendData.Length);
+
                 }
-                catch (Exception)
+                catch
                 {
-                    _ui.lblInfo.Text = "Mesaj gönderilemedi";
+                    SetBluetoothStatus(false);
+                    _ui.pBluetooth.Visible = false;
+                    _ui.lblInfo.Text = "Bağlantı koptu !";
                 }
                 
 
+            }
+            else
+            {
+                _ui.pBluetooth.Visible = false;
+                _ui.lblInfo.Text = "Mesaj gönderilemedi !";
             }
         }
 
         //sürekli dinleme yapan listener olacak 
 
+
+        //-------receive
+
+        private void SetWarningEngine(bool value)
+        {
+            _ui.pEngine.Visible = value;
+        }
+        private void SetWarningHighTemp(bool value)
+        {
+            _ui.pHighTemp.Visible = value;
+        }
+        private void SetWarningBattery(bool value)
+        {
+            _ui.pBattery.Visible = value;
+        }
+        private void SetWarningOil(bool value)
+        {
+            _ui.pOil.Visible = value;
+        }
+
+
+
+        //-------send
+
         public void SendKM(int value)
         {
             SendData(addressSpeed, Convert.ToByte(value));
+        }
+
+        public void SendDirection(int value)
+        {
+            SendData(addressDirectionRotate, Convert.ToByte(value));
+        }
+        public void SendGoingDirection(int value)
+        {
+            SendData(addressGoingDirection, Convert.ToByte(value));
+        }
+
+        public void SendSignalRight(bool value)
+        {
+            SendData(addressLedSignalRight, Convert.ToByte(value));
+        }
+
+        public void SendSignalLeft(bool value)
+        {
+            SendData(addressLedSignalLeft, Convert.ToByte(value));
+        }
+
+        public void SendLedFog(bool value)
+        {
+            SendData(addressLedFog, Convert.ToByte(value));
+        }
+        public void SendLedShort(bool value)
+        {
+            SendData(addressLedShort, Convert.ToByte(value));
+        }
+        public void SendLedLong(bool value)
+        {
+            SendData(addressLedLong, Convert.ToByte(value));
+        }
+        public void SendLedPoint(bool value)
+        {
+            SendData(addressLedPoint, Convert.ToByte(value));
+        }
+        public void SendLedTop(bool value)
+        {
+            SendData(addressLedTop, Convert.ToByte(value));
+        }
+        public void SendLedStop(bool value)
+        {
+            SendData(addressLedStop, Convert.ToByte(value));
+        }
+        public void SendLedAbs(bool value)
+        {
+            SendData(addressLedAbs, Convert.ToByte(value));
+        }
+        public void SendLedR(bool value)
+        {
+            SendData(addressLedR, Convert.ToByte(value));
+        }
+
+        public void SendHorn(bool value)
+        {
+            SendData(addressHorn, Convert.ToByte(value));
+        }
+
+        public void SendSecurity(bool value)
+        {
+            SendData(addressSecurity, Convert.ToByte(value));
         }
 
     }

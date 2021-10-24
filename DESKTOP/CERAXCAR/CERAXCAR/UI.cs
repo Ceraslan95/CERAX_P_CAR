@@ -29,6 +29,8 @@ namespace CERAXCAR
         private bool rightlock = false;
         private bool leftlock = false;
 
+        private bool keyboardlock = true;
+
         public UI()
         {          
             InitializeComponent();
@@ -46,258 +48,308 @@ namespace CERAXCAR
 
         private void UI_KeyDown(object sender, KeyEventArgs e)
         {
-            
-
-            switch (e.KeyCode)
-            {                              
-                case Keys.N:
-                    {
-                        if (!nitrolock)
+            if (!keyboardlock)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.N:
                         {
-                            nitrolock = true;
-                            motor.SetNitroValue(true);
-                        }
-                    }
-                    break;                                            
-                case Keys.Space:
-                    {   
-                        if (!abslock)                         
-                        {
-                            abslock = true;
-                            motor.SetCruiseValue(false);
-                            motor.SetAbsValue(true);
-                        }
-                    
-                    }
-                    break;
-                case Keys.H:
-                    {
-                        if (!hornlock)
-                        {
-                            hornlock = true;
-                            pHorn.Visible = true;
-                        }
-                        
-                    }
-                    break;              
-                case Keys.W:
-                    {
-                        if (!handBreak.GetStatus())
-                        {
-                            if (!motorlock)
+                            if (!nitrolock)
                             {
-                                motorlock = true;
-                                motor.SetCruiseValue(false);
-                                motor.SpeedUp();                               
+                                nitrolock = true;
+                                motor.SetNitroValue(true);
                             }
                         }
-                                       
-                    }
-                    break;
-                case Keys.J:
-                    {
-                        if (!longlock)
+                        break;
+                    case Keys.Space:
                         {
-                            longlock = true;
-                            pLongLed.Visible = true;
-                        }
-                        
-                    }
-                    break;
-                case Keys.A:
-                    {
-                        if (!leftlock)
-                        {
-                            leftlock = true;
-                            rightlock = true;
-                            motor.SetDirectionStatus(Direction.Left);
-                        }
-                    }
-                    break;
-                case Keys.D:
-                    {
-                        if (!rightlock)
-                        {
-                            rightlock = true;
-                            leftlock = true;
-                            motor.SetDirectionStatus(Direction.Right);
-                        }
-                    }
-                    break;
+                            if (!abslock)
+                            {
+                                abslock = true;
+                                motor.SetCruiseValue(false);
+                                motor.SetAbsValue(true);
+                                bluetooth.SendLedAbs(motor.GetAbsValue());
+                            }
 
+                        }
+                        break;
+                    case Keys.H:
+                        {
+                            if (!hornlock)
+                            {
+                                hornlock = true;
+                                pHorn.Visible = true;
+                                bluetooth.SendHorn(pHorn.Visible);
+                            }
+
+                        }
+                        break;
+                    case Keys.W:
+                        {
+                            if (!handBreak.GetStatus())
+                            {
+                                if (!motorlock)
+                                {
+                                    motorlock = true;
+                                    motor.SetCruiseValue(false);
+                                    motor.SpeedUp();
+                                }
+                            }
+
+                        }
+                        break;
+                    case Keys.J:
+                        {
+                            if (!longlock)
+                            {
+                                longlock = true;
+                                pLongLed.Visible = true;
+                                bluetooth.SendLedLong(pLongLed.Visible);
+                            }
+
+                        }
+                        break;
+                    case Keys.A:
+                        {
+                            if (!leftlock)
+                            {
+                                leftlock = true;
+                                rightlock = true;
+                                motor.SetDirectionStatus(Direction.Left);
+                            }
+                        }
+                        break;
+                    case Keys.D:
+                        {
+                            if (!rightlock)
+                            {
+                                rightlock = true;
+                                leftlock = true;
+                                motor.SetDirectionStatus(Direction.Right);
+                            }
+                        }
+                        break;
+
+                }
             }
+
+           
         }
 
         private void UI_KeyUp(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            if (!keyboardlock)
             {
-                case Keys.G:
-                    { pSecurity.Visible = !pSecurity.Visible; }
-                    break;
-                case Keys.B:
-                    {
-                        if (!motor.GetGoStatus())
+                switch (e.KeyCode)
+                {
+                    case Keys.G:
                         {
-                            if (!handBreak.GetStatus())
+                            pSecurity.Visible = !pSecurity.Visible;
+                            bluetooth.SendSecurity(pSecurity.Visible);
+                        }
+                        break;
+                    case Keys.B:
+                        {
+                            if (!motor.GetGoStatus())
                             {
-                                handBreak.SetStatus(true);
+                                if (!handBreak.GetStatus())
+                                {
+                                    handBreak.SetStatus(true);
+                                }
+                                else
+                                {
+                                    handBreak.SetStatus(false);
+                                }
+                                bluetooth.SendLedAbs(handBreak.GetStatus());
+                            }
+
+                        }
+                        break;
+                    case Keys.V:
+                        {
+                            if (!motor.GetGoStatus())
+                            {
+                                motor.SetGoingDirection(true);
+                                motor.SetGearValue(Gears.Zero);
+                                bluetooth.SendLedR(false);
+                            }
+                        }
+                        break;
+                    case Keys.Escape:
+                        {
+                            if (MessageBox.Show("Kontrol paneli kapatılsın mı?", "CERAX CAR SYSTEM",
+                                  MessageBoxButtons.OKCancel) == DialogResult.OK)
+                            {
+                                this.Close();
+                            }
+                        }
+                        break;
+                    case Keys.E:
+                        {
+                            if (timerRightSignal.Enabled)
+                            {
+                                StopRightSignal();
                             }
                             else
                             {
-                                handBreak.SetStatus(false);
+                                StartRightSignal();
+                            }
+
+                        }
+                        break;
+                    case Keys.Q:
+                        {
+                            if (timerLeftSignal.Enabled)
+                            {
+                                StopLeftSignal();
+                            }
+                            else
+                            {
+                                StartLeftSignal();
                             }
                         }
+                        break;
+                    case Keys.F:
+                        {
+                            pFourAlert.Visible = !pFourAlert.Visible;
+                            if (Timer4Signal.Enabled)
+                            {
+                                Stop4Signal();
+                            }
+                            else
+                            {
+                                Start4Signal();
+                            }
 
-                    }
-                    break;
-                case Keys.V:
-                    {
-                        if (!motor.GetGoStatus())
-                        {
-                            motor.SetGearValue(Gears.Zero);
                         }
-                    }
-                    break;
-                case Keys.Escape:
-                    {
-                        if (MessageBox.Show("Kontrol paneli kapatılsın mı?", "CERAX CAR SYSTEM",
-                              MessageBoxButtons.OKCancel) == DialogResult.OK)
+                        break;
+                    case Keys.R:
                         {
-                            this.Close();
+                            if (motor.GetGearValue() == Gears.Zero)
+                            {
+                                motor.SetGoingDirection(false);
+                                motor.SetGearValue(Gears.R);
+                                bluetooth.SendLedR(true);
+                            }
                         }
-                    }
-                    break;
-                case Keys.E:
-                    {
-                        if (timerRightSignal.Enabled)
+                        break;
+                    case Keys.J:
                         {
-                            StopRightSignal();
+                            longlock = false;
+                            pLongLed.Visible = false;
+                            bluetooth.SendLedLong(pLongLed.Visible);
                         }
-                        else
+                        break;
+                    case Keys.N:
                         {
-                            StartRightSignal();
+                            nitrolock = false;
+                            motor.SetNitroValue(false);
                         }
+                        break;
+                    case Keys.Space:
+                        {
+                            abslock = false;
+                            motor.SetAbsValue(false);
+                            bluetooth.SendLedAbs(motor.GetAbsValue());
+                        }
+                        break;
+                    case Keys.H:
+                        {
+                            hornlock = false;
+                            pHorn.Visible = false;
+                            bluetooth.SendHorn(pHorn.Visible);
+                        }
+                        break;
+                    case Keys.W:
+                        {
+                            motorlock = false;
+                            motor.SpeedDown();
+                        }
+                        break;
+                    case Keys.T:
+                        {
+                            if (motor.GetTurboValue())
+                            {
+                                motor.SetTurboValue(false);
+                            }
+                            else
+                            {
+                                motor.SetTurboValue(true);
+                            }
+                        }
+                        break;
+                    case Keys.C:
+                        {
+                            if (motor.GetCruiseValue())
+                            {
+                                motor.SetCruiseValue(false);
+                            }
+                            else
+                            {
+                                motor.SetCruiseValue(true);
+                            }
 
-                    }
-                    break;
-                case Keys.Q:
-                    {
-                        if (timerLeftSignal.Enabled)
-                        {
-                            StopLeftSignal();
                         }
-                        else
+                        break;
+                    case Keys.Y:
                         {
-                            StartLeftSignal();
+                            pTopLed.Visible = !pTopLed.Visible;
+                            bluetooth.SendLedTop(pTopLed.Visible);
                         }
-                    }
-                    break;
-                case Keys.F:
-                    {
-                        pFourAlert.Visible = !pFourAlert.Visible;
-                        if (Timer4Signal.Enabled)
+                        break;
+                    case Keys.I:
                         {
-                            Stop4Signal();
+                            pShortLed.Visible = !pShortLed.Visible;
+                            bluetooth.SendLedShort(pShortLed.Visible);
                         }
-                        else
+                        break;
+                    case Keys.U:
                         {
-                            Start4Signal();
+                            pLongLed.Visible = !pLongLed.Visible;
+                            bluetooth.SendLedLong(pLongLed.Visible);
                         }
-
-                    }
-                    break;
-                case Keys.R:
-                    {
-                        if (motor.GetGearValue() == Gears.Zero)
+                        break;
+                    case Keys.O:
                         {
-                            motor.SetGearValue(Gears.R);
+                            pFog.Visible = !pFog.Visible;
+                            bluetooth.SendLedFog(pFog.Visible);
                         }
-                    }
-                    break;
-                case Keys.J:
-                    { longlock = false; pLongLed.Visible = false; }
-                    break;
-                case Keys.N:
-                    { nitrolock = false; motor.SetNitroValue(false); }
-                    break;
-                case Keys.Space:
-                    { abslock = false; motor.SetAbsValue(false); }
-                    break;
-                case Keys.H:
-                    { hornlock = false; pHorn.Visible = false; }
-                    break;
-                case Keys.W:
-                    { motorlock = false; motor.SpeedDown(); }
-                    break;
-                case Keys.T:
-                    {
-                        if (motor.GetTurboValue())
+                        break;
+                    case Keys.P:
                         {
-                            motor.SetTurboValue(false);
+                            pTarget.Visible = !pTarget.Visible;
+                            bluetooth.SendLedPoint(pTarget.Visible);
                         }
-                        else
+                        break;
+                    case Keys.Z:
                         {
-                            motor.SetTurboValue(true);
+                            pESP.Visible = !pESP.Visible;
                         }
-                    }
-                    break;
-                case Keys.C:
-                    {
-                        if (motor.GetCruiseValue())
+                        break;
+                    case Keys.K:
                         {
-                            motor.SetCruiseValue(false);
+                            bluetooth.StartConnection();
                         }
-                        else
+                        break;
+                    case Keys.A:
                         {
-                            motor.SetCruiseValue(true);
+                            leftlock = false;
+                            rightlock = false;
+                            motor.SetDirectionStatus(Direction.Middle);
                         }
-                            
-                    }
-                    break;
-                case Keys.Y:
-                    { pTopLed.Visible = !pTopLed.Visible; }
-                    break;
-                case Keys.I:
-                    { pShortLed.Visible = !pShortLed.Visible; }
-                    break;
-                case Keys.U:
-                    { pLongLed.Visible = !pLongLed.Visible; }
-                    break;
-                case Keys.O:
-                    { pFog.Visible = !pFog.Visible; }
-                    break;
-                case Keys.P:
-                    { pTarget.Visible = !pTarget.Visible; }
-                    break;
-                case Keys.Z:
-                    {
-                        pESP.Visible = !pESP.Visible;
-                    }
-                    break;
-                case Keys.K:
-                    {
-                        bluetooth.StartConnection();
-                    }
-                    break;
-                case Keys.A:
-                    {
-                        leftlock = false;
-                        rightlock = false;
-                        motor.SetDirectionStatus(Direction.Middle);
-                    }
-                    break;
-                case Keys.D:
-                    {
-                        rightlock = false;
-                        leftlock = false;
-                        motor.SetDirectionStatus(Direction.Middle);
-                    }
-                    break;
+                        break;
+                    case Keys.D:
+                        {
+                            rightlock = false;
+                            leftlock = false;
+                            motor.SetDirectionStatus(Direction.Middle);
+                        }
+                        break;
+                }
             }
+
+           
         }
-
-
 
         //Signals
         public void Start4Signal()
@@ -314,8 +366,9 @@ namespace CERAXCAR
         {
             Timer4Signal.Stop();
             pRightSignal.Visible = false;
+            bluetooth.SendSignalRight(pRightSignal.Visible);
             pLeftSignal.Visible = false;
-                      
+            bluetooth.SendSignalLeft(pLeftSignal.Visible);
         }
 
         public void StartRightSignal()
@@ -332,7 +385,8 @@ namespace CERAXCAR
         {
             timerRightSignal.Stop();
             pRightSignal.Visible = false;
-            
+            bluetooth.SendSignalRight(pRightSignal.Visible);
+
         }
 
         public void StartLeftSignal()
@@ -349,6 +403,7 @@ namespace CERAXCAR
         {
             timerLeftSignal.Stop();
             pLeftSignal.Visible = false;
+            bluetooth.SendSignalLeft(pLeftSignal.Visible);
         }
 
         //UI Timers 
@@ -356,17 +411,32 @@ namespace CERAXCAR
         private void Timer4Signal_Tick(object sender, EventArgs e)
         {
             pRightSignal.Visible = !pRightSignal.Visible;
+            bluetooth.SendSignalRight(pRightSignal.Visible);
             pLeftSignal.Visible = !pLeftSignal.Visible;
+            bluetooth.SendSignalLeft(pLeftSignal.Visible);
         }
 
         private void timerInit_Tick(object sender, EventArgs e)
         {
+            ResetInit();
+            keyboardlock = false;
+            lblInfo.Text = "";
+            timerInit.Stop();
+        }
+
+        public void ResetInit()
+        {
             pLeftSignal.Visible = false;
+            //bluetooth.SendSignalLeft(pLeftSignal.Visible);
             pRightSignal.Visible = false;
+            //bluetooth.SendSignalRight(pRightSignal.Visible);
             pFourAlert.Visible = false;
             pShortLed.Visible = false;
+            //bluetooth.SendLedShort(pShortLed.Visible);
             pLongLed.Visible = false;
+            //bluetooth.SendLedLong(pLongLed.Visible);
             pFog.Visible = false;
+            //bluetooth.SendLedFog(pFog.Visible);
             pBluetooth.Visible = false;
             pABS.Visible = false;
             pBattery.Visible = false;
@@ -377,26 +447,31 @@ namespace CERAXCAR
             pOil.Visible = false;
             pNitro.Visible = false;
             pHorn.Visible = false;
+            //bluetooth.SendHorn(pHorn.Visible);
             pSecurity.Visible = false;
+            //bluetooth.SendSecurity(pSecurity.Visible);
             pTurbo.Visible = false;
             pTopLed.Visible = false;
+            //bluetooth.SendLedTop(pTopLed.Visible);
             pTarget.Visible = false;
-            lblInfo.Text = "";
-            timerInit.Stop();
+            //bluetooth.SendLedPoint(pTarget.Visible);
+            pHandBreak.Visible = true;
+            //bluetooth.SendLedAbs(pHandBreak.Visible);
         }
+
+       
 
         private void timerRightSignal_Tick(object sender, EventArgs e)
         {
             pRightSignal.Visible = !pRightSignal.Visible;
+            bluetooth.SendSignalRight(pRightSignal.Visible);
         }
 
         private void timerLeftSignal_Tick(object sender, EventArgs e)
         {
             pLeftSignal.Visible = !pLeftSignal.Visible;
+            bluetooth.SendSignalLeft(pLeftSignal.Visible);
         }
-
-
-
 
         //Bluetooth
 
@@ -405,6 +480,10 @@ namespace CERAXCAR
             bluetooth.SendKM((int)KMUI.Value);
         }
 
+        public void DirectionChanged(int value)
+        {
+            bluetooth.SendDirection(value);
+        }
 
     }
 }

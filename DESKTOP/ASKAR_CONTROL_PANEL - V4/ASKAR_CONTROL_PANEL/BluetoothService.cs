@@ -11,7 +11,7 @@ using InTheHand.Net.Ports;
 using System.IO;
 using Microsoft.VisualBasic.Logging;
 using System.Net.Sockets;
-using System.Threading;
+
 
 namespace ASKAR_CONTROL_PANEL
 {
@@ -19,7 +19,7 @@ namespace ASKAR_CONTROL_PANEL
     {
         private BluetoothClient bluetoothClient;
         private BluetoothListener bluetoothListener;
-        Thread Thread_BT;
+        
 
         ASKAR_UI_FORM Main_UI;
         private byte[] receivedData = new byte[5];

@@ -32,7 +32,7 @@ namespace CERAXCAR.Concrete.Engine
         private const int speedMaxValue = 240;
         private const int speedMinValue = 0;
 
-        
+        private const int speedRMaxValue = 100;
 
         //--------------------------------
 
@@ -45,7 +45,7 @@ namespace CERAXCAR.Concrete.Engine
         private const int gearIntervalFive = 120;
         private const int gearIntervalSix = 160;
 
-        private const int speedIntervalR = 40;
+        private const int speedIntervalR = 12;
         private const int speedIntervalOne = 12;
         private const int speedIntervalTwo = 18;
         private const int speedIntervalThree = 24;
@@ -131,6 +131,7 @@ namespace CERAXCAR.Concrete.Engine
                     }
                     break;
             }
+            _ui.DirectionChanged(directionValue);
         }
 
         private void TurnDirectionRight()
@@ -178,12 +179,24 @@ namespace CERAXCAR.Concrete.Engine
             SetSpeedUpDown(false);
         }
         private void IncreaseSpeed()
-        {           
-            if(speed < speedMaxValue)
+        {
+            if (GetGoingDirection())
             {
-                speed++;
-                _ui.KMUI.Value = speed;
-            }                       
+                if (speed < speedMaxValue)
+                {
+                    speed++;
+                    _ui.KMUI.Value = speed;
+                }
+            }
+            else
+            {
+                if (speed < speedRMaxValue)
+                {
+                    speed++;
+                    _ui.KMUI.Value = speed;
+                }
+            }
+                                  
         }
         private void DecreaseSpeed()
         {
@@ -367,8 +380,6 @@ namespace CERAXCAR.Concrete.Engine
         public void SetGearValue(Gears gear)
         {
             gearValue = gear;
-
-
             switch (gear)
             {
                 case Gears.R:
@@ -466,6 +477,10 @@ namespace CERAXCAR.Concrete.Engine
                     SetGearValue(Gears.Seven);
                 }
             }
+            else
+            {
+                SetGearValue(Gears.R);
+            }
 
 
         }
@@ -478,6 +493,7 @@ namespace CERAXCAR.Concrete.Engine
         public void SetDirectionStatus(Direction value)
         {
             direction = value;
+            if (!directionTimer.Enabled) { directionTimer.Start(); }
         }
 
         public void SetDirectionValue(int value)
