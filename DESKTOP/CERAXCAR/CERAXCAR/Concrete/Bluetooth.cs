@@ -16,15 +16,19 @@ namespace CERAXCAR.Concrete
     {
         
         UI _ui;
-        private const string carName = "HC-06";
+        private const string carName = "CERASCAR";
 
         private bool bluetoothStatus = false;
         public Timer connectionTimer;
 
         public byte[] sendData;
         public byte[] receivedData;
-        public const byte CheckSumKey = 0x16;
+        public const byte CheckSumKey = 0x10;
 
+        private const int lenghtReceiveData = 3;
+        private const int lenghtSendData = 3;
+
+        //sending
         public const byte addressSpeed = 0x01;
         public const byte addressLedSignalLeft = 0x02;
         public const byte addressLedSignalRight = 0x03;
@@ -41,6 +45,14 @@ namespace CERAXCAR.Concrete
         public const byte addressHorn = 0x0E;
         public const byte addressSecurity = 0x0F;
 
+        //received
+        public const byte addressWarningBattery = 0x01;
+        public const byte addressWarningMotorTemp = 0x02;
+        public const byte addressWarningOil = 0x03;
+        public const byte addressWarningEngine = 0x04;
+        public const byte addressBatteryValue = 0x05;
+
+
         private BluetoothClient bluetoothClient;
         public BackgroundWorker scanWorker;
         public BackgroundWorker connectionWorker;
@@ -48,6 +60,10 @@ namespace CERAXCAR.Concrete
        
 
         BluetoothDeviceInfo carDeviceInfo;
+        private const int dataCheckSumIndex = 0;
+        private const int dataAddressIndex = 1;
+        private const int dataValueIndex = 2;
+        
 
         public Bluetooth(UI ui)
         {
@@ -57,13 +73,15 @@ namespace CERAXCAR.Concrete
             connectionTimer.Interval = 700;
             connectionTimer.Elapsed += new ElapsedEventHandler(ConnectionTimer_Tick);
 
-            sendData = new byte[3];
-            sendData[0] = CheckSumKey;
+            sendData = new byte[lenghtSendData];
+            sendData[dataCheckSumIndex] = CheckSumKey;
+            //receivedData = new byte[lenghtReceiveData];
 
-            receivedData = new byte[10];
 
 
-            
+
+
+
             bluetoothClient = new BluetoothClient();
             scanWorker = new BackgroundWorker();
             scanWorker.DoWork += ScanWorker_DoWork;
@@ -113,7 +131,8 @@ namespace CERAXCAR.Concrete
 
 
                     SetBluetoothStatus(true);
-
+                    _ui.lblInfo.Text = "* Bağlandı *";
+                    Listener();
                 }
                 else
                 {
@@ -127,6 +146,8 @@ namespace CERAXCAR.Concrete
             }
 
         }
+
+        
 
         public void ScanDevices()
         {
@@ -185,8 +206,7 @@ namespace CERAXCAR.Concrete
 
         private void SetBluetoothStatus(bool value)
         {
-            bluetoothStatus = value;
-            
+            bluetoothStatus = value;            
         }
 
         public void StartConnection()
@@ -204,7 +224,79 @@ namespace CERAXCAR.Concrete
             scanWorker.RunWorkerAsync();
         }
 
+        private void Listener()
+        {
+            var x = Task.Run(() =>
+            {
 
+                do
+                {
+                    if (bluetoothClient.Connected)
+                    {
+                        if (bluetoothClient.Available > 0)
+                        {
+                            var stream = bluetoothClient.GetStream();
+                            byte[] receivedData = new byte[lenghtReceiveData];
+                            int result = 0;
+                            //while (stream.DataAvailable)
+                            //{
+
+                            //}
+                            int offset = 0;
+                            int remaining = receivedData.Length;
+                            while (remaining > 0)
+                            {
+                                int read = stream.Read(receivedData, offset, remaining);
+                               
+                                remaining -= read;
+                                offset += read;
+                            }
+                            SolutionCenter(receivedData);
+                            
+
+                        }
+                    }
+                    
+                } while (true);
+
+            });
+        }
+
+        private void SolutionCenter(byte[] receivedData)
+        {
+            if (receivedData[dataCheckSumIndex] == CheckSumKey)
+            {
+                var value = receivedData[dataValueIndex];
+                switch (receivedData[dataAddressIndex])
+                {
+                    case addressWarningBattery:
+                        {
+                            SetWarningBattery(Convert.ToBoolean(value));
+                        }
+                        break;
+                    case addressBatteryValue:
+                        {
+                            SetBatteryValue(Convert.ToInt32(value));
+                        }
+                        break;
+                    case addressWarningEngine:
+                        {
+                            SetWarningEngine(Convert.ToBoolean(value));
+                        }
+                        break;
+                    case addressWarningMotorTemp:
+                        {
+                            SetWarningHighTemp(Convert.ToBoolean(value));
+                        }
+                        break;
+                    case addressWarningOil:
+                        {
+                            SetWarningOil(Convert.ToBoolean(value));
+                        }
+                        break;
+                }
+            }
+        }
 
         private void SendData(byte address,byte value)
         {
@@ -212,12 +304,22 @@ namespace CERAXCAR.Concrete
             {
                 try
                 {
-                    sendData[1] = address;
-                    sendData[2] = value;
-                    var stream = bluetoothClient.GetStream();
-                    ////stream.WriteByte(value);
+                    if (bluetoothClient.Connected)
+                    {
+                        sendData[dataAddressIndex] = address;
+                        sendData[dataValueIndex] = value;
 
-                    stream.Write(sendData, 0, sendData.Length);
+                        var stream = bluetoothClient.GetStream();
+                        
+                        stream.Write(sendData, 0, sendData.Length);
+                        stream.Flush();
+                    }
+                    else
+                    {
+                        SetBluetoothStatus(false);
+                        _ui.pBluetooth.Visible = false;
+                        _ui.lblInfo.Text = "Bağlantı koptu !";
+                    }
 
                 }
                 catch
@@ -249,9 +351,14 @@ namespace CERAXCAR.Concrete
         {
             _ui.pHighTemp.Visible = value;
         }
+        
         private void SetWarningBattery(bool value)
         {
             _ui.pBattery.Visible = value;
+        }
+        private void SetBatteryValue(int value)
+        {
+            _ui.KMUI.GaugeRanges.FindByName("KMBattery").EndValue = value;
         }
         private void SetWarningOil(bool value)
         {
