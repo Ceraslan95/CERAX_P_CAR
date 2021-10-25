@@ -4,8 +4,10 @@ using InTheHand.Net.Sockets;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using System.Timers;
@@ -19,7 +21,7 @@ namespace CERAXCAR.Concrete
         private const string carName = "CERASCAR";
 
         private bool bluetoothStatus = false;
-        public Timer connectionTimer;
+        public System.Timers.Timer connectionTimer;
 
         public byte[] sendData;
         public byte[] receivedData;
@@ -46,49 +48,46 @@ namespace CERAXCAR.Concrete
         public const byte addressSecurity = 0x0F;
 
         //received
-        public const byte addressWarningBattery = 0x01;
-        public const byte addressWarningMotorTemp = 0x02;
+        
         public const byte addressWarningOil = 0x03;
         public const byte addressWarningEngine = 0x04;
         public const byte addressBatteryValue = 0x05;
+        public const byte addressEngineTemp = 0x06;
 
+        private const int batteryWarningValue = 40;
+        private const int highTempWarningValue = 210;
+        private const int middleTempWarningValue = 160;
 
-        private BluetoothClient bluetoothClient;
+        private BluetoothClient bluetoothClient;             
         public BackgroundWorker scanWorker;
-        public BackgroundWorker connectionWorker;
-        
-       
-
+        public BackgroundWorker connectionWorker;            
         BluetoothDeviceInfo carDeviceInfo;
+
         private const int dataCheckSumIndex = 0;
         private const int dataAddressIndex = 1;
         private const int dataValueIndex = 2;
+
         
 
         public Bluetooth(UI ui)
         {
             _ui = ui;
             
-            connectionTimer = new Timer();
+            connectionTimer = new System.Timers.Timer();
             connectionTimer.Interval = 700;
             connectionTimer.Elapsed += new ElapsedEventHandler(ConnectionTimer_Tick);
 
             sendData = new byte[lenghtSendData];
             sendData[dataCheckSumIndex] = CheckSumKey;
             //receivedData = new byte[lenghtReceiveData];
-
-
-
-
+            receivedData = new byte[lenghtReceiveData];
 
 
             bluetoothClient = new BluetoothClient();
             scanWorker = new BackgroundWorker();
             scanWorker.DoWork += ScanWorker_DoWork;
             scanWorker.RunWorkerCompleted += ScanWorker_RunWorkerCompletedAsync;
-        }
-     
-
+        }     
         public void ScanWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             ScanDevices();
@@ -105,7 +104,6 @@ namespace CERAXCAR.Concrete
             }
                     
         }
-
         private void StopScanner()
         {
             
@@ -113,42 +111,41 @@ namespace CERAXCAR.Concrete
             SetBluetoothStatus(false);
             _ui.lblInfo.Text = "Bağlantı kurulamadı !";
             
-        }
-
+        }     
         public void Connect(BluetoothAddress address)
         {
-            
-            try
-            {
-                if (address is BluetoothAddress bluetoothAddress)
+            Task.Run(()=> {
+
+                try
                 {
-                    var endPoint = new BluetoothEndPoint(bluetoothAddress, BluetoothService.SerialPort);
-                    bluetoothClient.Connect(endPoint);
+                    if (address is BluetoothAddress bluetoothAddress)
+                    {
+                        var endPoint = new BluetoothEndPoint(bluetoothAddress, BluetoothService.SerialPort);
+                        bluetoothClient.Connect(endPoint);
+                        if (bluetoothClient.Connected)
+                        {
+                            SetBluetoothStatus(true);
+                            _ui.lblInfo.Text = "* Bağlandı *";
+                            Listener();
+                        }
+                        else
+                        {
+                            _ui.lblInfo.Text = "Bağlanamadı !";
+                        }
+                       
+                    }
+                    else
+                    {
 
-                    //bluetoothListener = new BluetoothListener(endPoint);
-                    //bluetoothListener.Start();
-                    //bluetoothClient = bluetoothListener.AcceptBluetoothClient();
-
-
-                    SetBluetoothStatus(true);
-                    _ui.lblInfo.Text = "* Bağlandı *";
-                    Listener();
+                        _ui.lblInfo.Text = "Uyuşmazlık !";
+                    }
                 }
-                else
+                catch
                 {
-
-                    _ui.lblInfo.Text = "Uyuşmazlık !";
+                    StopScanner();
                 }
-            }
-            catch 
-            {
-                StopScanner();
-            }
-
+            });           
         }
-
-        
-
         public void ScanDevices()
         {
             Disconnect();
@@ -176,20 +173,12 @@ namespace CERAXCAR.Concrete
                 }
             }
         }
-
-
-
-
-
-
-
         private void ConnectionTimer_Tick(object sender, ElapsedEventArgs e)
         {           
             _ui.pBluetooth.Visible = !_ui.pBluetooth.Visible;
             Console.WriteLine(_ui.pBluetooth.Visible);
             CheckConnection();
         }
-
         private void CheckConnection()
         {
             if (bluetoothStatus)
@@ -198,82 +187,67 @@ namespace CERAXCAR.Concrete
                 _ui.pBluetooth.Visible = true;
             }
         }
-
         public bool GetBluetoothStatus()
         {
             return bluetoothStatus;
         }
-
         private void SetBluetoothStatus(bool value)
         {
             bluetoothStatus = value;            
         }
-
         public void StartConnection()
         {
-            if (!connectionTimer.Enabled)
+            if (!connectionTimer.Enabled && !GetBluetoothStatus())
             {
                 connectionTimer.Start();
                 StartBluetooth();
             }
             
         }
-
         private void StartBluetooth()
         {
             scanWorker.RunWorkerAsync();
-        }
-
+        }       
         private void Listener()
         {
-            var x = Task.Run(() =>
+            
+            int offset = 0;
+            int remaining = 0;
+            int read = 0;
+            Task.Run(() =>
             {
 
                 do
                 {
-                    if (bluetoothClient.Connected)
+                                    
+                    var stream = bluetoothClient.GetStream();
+                    
+                    if (stream.DataAvailable)
                     {
-                        if (bluetoothClient.Available > 0)
+                        offset = 0;
+                        remaining = receivedData.Length;
+                        while (remaining > 0)
                         {
-                            var stream = bluetoothClient.GetStream();
-                            byte[] receivedData = new byte[lenghtReceiveData];
-                            int result = 0;
-                            //while (stream.DataAvailable)
-                            //{
+                            read = stream.Read(receivedData, offset, remaining);
 
-                            //}
-                            int offset = 0;
-                            int remaining = receivedData.Length;
-                            while (remaining > 0)
-                            {
-                                int read = stream.Read(receivedData, offset, remaining);
-                               
-                                remaining -= read;
-                                offset += read;
-                            }
-                            SolutionCenter(receivedData);
-                            
-
+                            remaining -= read;
+                            offset += read;
                         }
+
+                        SolutionCenter(receivedData);                        
                     }
                     
-                } while (true);
+                } while (bluetoothClient.Connected);
 
             });
-        }
-
+        }       
         private void SolutionCenter(byte[] receivedData)
         {
             if (receivedData[dataCheckSumIndex] == CheckSumKey)
             {
                 var value = receivedData[dataValueIndex];
                 switch (receivedData[dataAddressIndex])
-                {
-                    case addressWarningBattery:
-                        {
-                            SetWarningBattery(Convert.ToBoolean(value));
-                        }
-                        break;
+                {                   
                     case addressBatteryValue:
                         {
                             SetBatteryValue(Convert.ToInt32(value));
@@ -283,10 +257,10 @@ namespace CERAXCAR.Concrete
                         {
                             SetWarningEngine(Convert.ToBoolean(value));
                         }
-                        break;
-                    case addressWarningMotorTemp:
+                        break;                  
+                    case addressEngineTemp:
                         {
-                            SetWarningHighTemp(Convert.ToBoolean(value));
+                            SetEngineTemp(Convert.ToInt32(value));
                         }
                         break;
                     case addressWarningOil:
@@ -297,7 +271,6 @@ namespace CERAXCAR.Concrete
                 }
             }
         }
-
         private void SendData(byte address,byte value)
         {
             if (GetBluetoothStatus())
@@ -336,35 +309,51 @@ namespace CERAXCAR.Concrete
                 _ui.pBluetooth.Visible = false;
                 _ui.lblInfo.Text = "Mesaj gönderilemedi !";
             }
-        }
-
-        //sürekli dinleme yapan listener olacak 
-
-
+        }      
+   
         //-------receive
 
         private void SetWarningEngine(bool value)
         {
             _ui.pEngine.Visible = value;
-        }
-        private void SetWarningHighTemp(bool value)
+        }       
+        private void SetEngineTemp(int value)
         {
-            _ui.pHighTemp.Visible = value;
-        }
-        
-        private void SetWarningBattery(bool value)
-        {
-            _ui.pBattery.Visible = value;
-        }
+            _ui.KMUI.GaugeRanges.FindByName("MotorTemp").EndValue = value;
+            if (value >= highTempWarningValue)
+            {
+                _ui.KMUI.GaugeRanges.FindByName("MotorTemp").Color = Color.Red;
+                _ui.pHighTemp.Visible = true;
+            }
+            else if(value >= middleTempWarningValue && value < highTempWarningValue)
+            {
+                _ui.KMUI.GaugeRanges.FindByName("MotorTemp").Color = Color.DarkOrange;
+                _ui.pHighTemp.Visible = false;
+            }
+            else 
+            {
+                _ui.KMUI.GaugeRanges.FindByName("MotorTemp").Color = Color.RoyalBlue;
+                _ui.pHighTemp.Visible = false;
+            }
+        }      
         private void SetBatteryValue(int value)
         {
             _ui.KMUI.GaugeRanges.FindByName("KMBattery").EndValue = value;
+            if (value < batteryWarningValue)
+            {
+                _ui.KMUI.GaugeRanges.FindByName("KMBattery").Color = Color.Red;
+                _ui.pBattery.Visible = true;
+            }
+            else
+            {
+                _ui.KMUI.GaugeRanges.FindByName("KMBattery").Color = Color.DarkGreen;
+                _ui.pBattery.Visible = false;
+            }
         }
         private void SetWarningOil(bool value)
         {
             _ui.pOil.Visible = value;
         }
-
 
 
         //-------send
@@ -373,7 +362,6 @@ namespace CERAXCAR.Concrete
         {
             SendData(addressSpeed, Convert.ToByte(value));
         }
-
         public void SendDirection(int value)
         {
             SendData(addressDirectionRotate, Convert.ToByte(value));
@@ -382,17 +370,14 @@ namespace CERAXCAR.Concrete
         {
             SendData(addressGoingDirection, Convert.ToByte(value));
         }
-
         public void SendSignalRight(bool value)
         {
             SendData(addressLedSignalRight, Convert.ToByte(value));
         }
-
         public void SendSignalLeft(bool value)
         {
             SendData(addressLedSignalLeft, Convert.ToByte(value));
         }
-
         public void SendLedFog(bool value)
         {
             SendData(addressLedFog, Convert.ToByte(value));
@@ -425,12 +410,10 @@ namespace CERAXCAR.Concrete
         {
             SendData(addressLedR, Convert.ToByte(value));
         }
-
         public void SendHorn(bool value)
         {
             SendData(addressHorn, Convert.ToByte(value));
         }
-
         public void SendSecurity(bool value)
         {
             SendData(addressSecurity, Convert.ToByte(value));

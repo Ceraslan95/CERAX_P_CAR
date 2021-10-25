@@ -421,7 +421,9 @@ namespace CERAXCAR
             ResetInit();
             keyboardlock = false;
             lblInfo.Text = "";
+            bluetooth.StartConnection();
             timerInit.Stop();
+            
         }
 
         public void ResetInit()
@@ -485,5 +487,6 @@ namespace CERAXCAR
             bluetooth.SendDirection(value);
         }
 
+        
     }
 }
