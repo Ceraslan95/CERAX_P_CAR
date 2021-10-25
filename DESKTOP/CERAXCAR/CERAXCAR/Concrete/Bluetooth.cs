@@ -84,6 +84,7 @@ namespace CERAXCAR.Concrete
 
 
             bluetoothClient = new BluetoothClient();
+            
             scanWorker = new BackgroundWorker();
             scanWorker.DoWork += ScanWorker_DoWork;
             scanWorker.RunWorkerCompleted += ScanWorker_RunWorkerCompletedAsync;
@@ -221,7 +222,7 @@ namespace CERAXCAR.Concrete
                 {
                                     
                     var stream = bluetoothClient.GetStream();
-                    
+                    Thread.Sleep(1000);
                     if (stream.DataAvailable)
                     {
                         offset = 0;
