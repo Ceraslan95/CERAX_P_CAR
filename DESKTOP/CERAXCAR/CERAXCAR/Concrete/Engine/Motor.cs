@@ -23,7 +23,11 @@ namespace CERAXCAR.Concrete.Engine
         private const int directionMaxLeftValue = 45;
         private const int directionMiddleValue = 90;
         private const int directionMaxRightValue = 135;
-        
+
+        private const int directionESPMaxLeftValue = 60;
+        private const int directionESPMaxRightValue = 120;
+        private const int directionESPActiveValue = 180;
+
 
         private bool speedUpDown;
 
@@ -64,6 +68,8 @@ namespace CERAXCAR.Concrete.Engine
 
         private bool abs = false;
         private const int absAdditive = 1;
+
+        private bool esp = false;
 
         private bool cruise = false;
 
@@ -136,10 +142,31 @@ namespace CERAXCAR.Concrete.Engine
 
         private void TurnDirectionRight()
         {
-            if (directionValue < directionMaxRightValue)
+            if (GetEspValue())
             {
-                directionValue++;
+                if (speed > directionESPActiveValue)
+                {
+                    if (directionValue < directionESPMaxRightValue)
+                    {
+                        directionValue++;
+                    }
+                }
+                else
+                {
+                    if (directionValue < directionMaxRightValue)
+                    {
+                        directionValue++;
+                    }
+                }
             }
+            else
+            {
+                if (directionValue < directionMaxRightValue)
+                {
+                    directionValue++;
+                }
+            }
+            
         }
 
         private void TurnDirectionMiddle()
@@ -154,15 +181,43 @@ namespace CERAXCAR.Concrete.Engine
             }
             if (directionValue == directionMiddleValue) { directionTimer.Stop(); }
         }
-
         private void TurnDirectionLeft()
         {
-            if (directionValue > directionMaxLeftValue)
+            if (GetEspValue())
             {
-                directionValue--;
+                if (speed > directionESPActiveValue)
+                {
+                    if (directionValue > directionESPMaxLeftValue)
+                    {
+                        directionValue--;
+                    }
+                }
+                else
+                {
+                    if (directionValue > directionMaxLeftValue)
+                    {
+                        directionValue--;
+                    }
+                }
             }
+            else
+            {
+                if (directionValue > directionMaxLeftValue)
+                {
+                    directionValue--;
+                }
+            }
+            
         }
-
+        public void SetEspValue(bool value)
+        {
+            esp = value;
+            _ui.pESP.Visible = value;
+        }
+        public bool GetEspValue()
+        {
+            return esp;
+        }
         public void SpeedUp()
         {
             if (!speedTimer.Enabled)

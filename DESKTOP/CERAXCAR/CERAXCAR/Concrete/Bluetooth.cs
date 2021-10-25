@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -19,6 +20,7 @@ namespace CERAXCAR.Concrete
         
         UI _ui;
         private const string carName = "CERASCAR";
+        UInt64 KM;
 
         private bool bluetoothStatus = false;
         public System.Timers.Timer connectionTimer;
@@ -356,12 +358,34 @@ namespace CERAXCAR.Concrete
             _ui.pOil.Visible = value;
         }
 
-
+        public void SaveKM()
+        {
+            FileStream fs = new FileStream("C:\\Users\\er_as\\Documents\\GitHub\\CERAX_P_CAR\\DESKTOP\\CERAXCAR\\KM.txt", FileMode.Truncate, FileAccess.Write, FileShare.Write);
+            StreamWriter sw = new StreamWriter(fs);
+            sw.Flush();
+            sw.WriteLine(GetKM());
+            sw.Close();
+        }
         //-------send
-
-        public void SendKM(int value)
+        private UInt64 GetKM()
+        {
+            return KM;
+        }
+        public void SetKM(UInt64 value)
+        {
+            KM = value;
+            UInt64 kmmax = KM / 10000;
+            _ui.lblKM.Text = kmmax.ToString();
+        }
+        public void SendKM(UInt64 value)
         {
             SendData(addressSpeed, Convert.ToByte(value));
+            if (bluetoothClient.Connected) 
+            {
+                KM += value;
+                UInt64 kmmax = KM / 10000;
+                _ui.lblKM.Text = kmmax.ToString();
+            }
         }
         public void SendDirection(int value)
         {

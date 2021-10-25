@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,12 @@ namespace CERAXCAR
         private void UI_Load(object sender, EventArgs e)
         {
             lblInfo.Text = "Lütfen Bekleyiniz !";
+
+            FileStream fs = new FileStream("C:\\Users\\er_as\\Documents\\GitHub\\CERAX_P_CAR\\DESKTOP\\CERAXCAR\\KM.txt", FileMode.Open, FileAccess.Read, FileShare.Read);
+            StreamReader sr = new StreamReader(fs);
+            UInt64 km = Convert.ToUInt64(sr.ReadLine());
+            bluetooth.SetKM(km);
+            sr.Close();
         }
 
         private void UI_KeyDown(object sender, KeyEventArgs e)
@@ -323,7 +330,14 @@ namespace CERAXCAR
                         break;
                     case Keys.Z:
                         {
-                            pESP.Visible = !pESP.Visible;
+                            if (motor.GetEspValue())
+                            {
+                                motor.SetEspValue(false);
+                            }
+                            else
+                            {
+                                motor.SetEspValue(true);
+                            }
                         }
                         break;
                     case Keys.K:
@@ -479,14 +493,18 @@ namespace CERAXCAR
 
         private void KMUI_ValueChanged(object sender, EventArgs e)
         {
-            bluetooth.SendKM((int)KMUI.Value);
+            bluetooth.SendKM(Convert.ToUInt64(KMUI.Value));
         }
 
         public void DirectionChanged(int value)
         {
             bluetooth.SendDirection(value);
+            Console.WriteLine(value);
         }
 
-        
+        private void UI_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            bluetooth.SaveKM();
+        }
     }
 }
