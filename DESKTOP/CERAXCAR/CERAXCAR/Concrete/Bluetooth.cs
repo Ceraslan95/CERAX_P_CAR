@@ -309,8 +309,9 @@ namespace CERAXCAR.Concrete
             }
             else
             {
+                SetBluetoothStatus(false);
                 _ui.pBluetooth.Visible = false;
-                _ui.lblInfo.Text = "Mesaj gönderilemedi !";
+                _ui.lblInfo.Text = "Mesaj gönderilemedi , bağlantı yok !";
             }
         }      
    
