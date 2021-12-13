@@ -7,5 +7,4 @@ C:\Users\er_as\Documents\GitHub\CERAX_P_CAR\DESKTOP\CERAXCAR\CERAXCAR\obj\Debug\
 C:\Users\er_as\Documents\GitHub\CERAX_P_CAR\DESKTOP\CERAXCAR\CERAXCAR\obj\Debug\CERAXCAR.exe
 C:\Users\er_as\Documents\GitHub\CERAX_P_CAR\DESKTOP\CERAXCAR\CERAXCAR\obj\Debug\CERAXCAR.pdb
 C:\Users\er_as\Documents\GitHub\CERAX_P_CAR\DESKTOP\CERAXCAR\CERAXCAR\obj\Debug\CERAXCAR.UI.resources
-C:\Users\er_as\Documents\GitHub\CERAX_P_CAR\DESKTOP\CERAXCAR\CERAXCAR\obj\Debug\CERAXCAR.csproj.CopyComplete
 C:\Users\er_as\Documents\GitHub\CERAX_P_CAR\DESKTOP\CERAXCAR\CERAXCAR\obj\Debug\CERAXCAR.csproj.AssemblyReference.cache
