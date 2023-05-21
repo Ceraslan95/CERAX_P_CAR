@@ -46,11 +46,11 @@ namespace CERAXCAR
         {
             lblInfo.Text = "Lütfen Bekleyiniz !";
 
-            FileStream fs = new FileStream("C:\\Users\\er_as\\Documents\\GitHub\\CERAX_P_CAR\\DESKTOP\\CERAXCAR\\KM.txt", FileMode.Open, FileAccess.Read, FileShare.Read);
-            StreamReader sr = new StreamReader(fs);
-            UInt64 km = Convert.ToUInt64(sr.ReadLine());
-            bluetooth.SetKM(km);
-            sr.Close();
+            //FileStream fs = new FileStream("C:\\Users\\er_as\\Belgeler\\GitHub\\CERAXLAN.CAR\\DESKTOP\\CERAXCAR\\KM.txt", FileMode.Open, FileAccess.Read, FileShare.Read);
+            //StreamReader sr = new StreamReader(fs);
+            //UInt64 km = Convert.ToUInt64(sr.ReadLine());
+            //bluetooth.SetKM(km);
+            //sr.Close();
         }
 
         private void UI_KeyDown(object sender, KeyEventArgs e)

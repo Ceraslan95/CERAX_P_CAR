@@ -361,11 +361,11 @@ namespace CERAXCAR.Concrete
 
         public void SaveKM()
         {
-            FileStream fs = new FileStream("C:\\Users\\er_as\\Documents\\GitHub\\CERAX_P_CAR\\DESKTOP\\CERAXCAR\\KM.txt", FileMode.Truncate, FileAccess.Write, FileShare.Write);
-            StreamWriter sw = new StreamWriter(fs);
-            sw.Flush();
-            sw.WriteLine(GetKM());
-            sw.Close();
+            //FileStream fs = new FileStream("C:\\Users\\er_as\\Documents\\GitHub\\CERAX_P_CAR\\DESKTOP\\CERAXCAR\\KM.txt", FileMode.Truncate, FileAccess.Write, FileShare.Write);
+            //StreamWriter sw = new StreamWriter(fs);
+            //sw.Flush();
+            //sw.WriteLine(GetKM());
+            //sw.Close();
         }
         //-------send
         private UInt64 GetKM()
